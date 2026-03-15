@@ -1,0 +1,26 @@
+name: Manset Guncelle
+on:
+  schedule:
+    - cron: '0 5 * * *' # Türkiye saatiyle 08:00
+  workflow_dispatch: # Manuel çalıştırma butonu
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Python Kur
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - name: Kütüphaneleri Yukle
+        run: pip install requests
+      - name: Botu Calistir
+        run: python bot.py
+      - name: Kaydet ve Yukle
+        run: |
+          git config --global user.name 'MansetBot'
+          git config --global user.email 'bot@github.com'
+          git add data.json
+          git commit -m "Güncel manşetler" || exit 0
+          git push
